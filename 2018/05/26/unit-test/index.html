@@ -28,5 +28,19 @@
 <blockquote>
 <p>这里有一个隐蔽的小坑，在全局安装了karma之后node执行karma的时候始终会报一个 Error: No provider for “framework:mocha”! 类型的错误，造成这个问题的原因是我在全局安装了karma，之后在stackoverflow上观察大神操作全局装karma-cli就ok了。。</p>
 </blockquote>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>也是这周抽的时间断断续续看了一些，明天还会整理一些完善一下该文章，顺便也会看一下CI服务器上使用Karma等方面的知识也会在本文完善。</p>
+<h2 id="travis-ci"><a href="#travis-ci" class="headerlink" title="travis-ci"></a>travis-ci</h2><p>这也是本人入门的第一个持续集成的学习，该ci提供一个运行环境用于测试、构建、部署等。好处的话就是足够方便、定制化提供集成的服务方向。</p>
+<ol>
+<li>首先登录travis-ci, 设置自己github与之关联的仓库文件，这里我把如上karma的代码仓库叫做travis-test</li>
+<li><p>然后载在如上travis-test新建一个travis.yml的配置模版</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">language: node_js</span><br><span class="line">node_js:</span><br><span class="line"> - &quot;node&quot;</span><br><span class="line">sudo: required</span><br><span class="line">addons:</span><br><span class="line">  chrome: stable</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>travis会根据yaml的该模版执行构建 =》 npm test的命令（travis.yml的默认命令，如需执行其他命令可以用script自定义）</p>
+</li>
+<li>把travis-test push 到github上，触发travis-ci进行构建</li>
+<li>之后去travis的构建页面查看一下日志，如果没有通过请浏览命令行查明具体原因，如果ok则会显示build: passing的徽章标志。</li>
+</ol>
+<blockquote>
+<p>遇到一个chrome-lanuncher一直失败的问题，在travis的隐藏文档中有一条描述，如果你当前vm没有安装browser，可以使用一个沙箱来代替作为此测试得以解决。</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>也是这周抽的时间断断续续看了一些，写了几个工具的demo，每周坚持下去吧。</p>
 </div></header></article></main><footer class="foot"><div class="foot-copy">&copy; 2016-2018 litchi</div></footer><script src="/js/scroller.js"></script><script src="/js/main.js"></script></body></html>
