@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="litchi"><link rel="alternative" href="/atom.xml" title="fe ? not exsit ?" type="application/atom+xml"><link rel="icon" href="/favicon.png"><title>关于一些运算符的了解 - fe ? not exsit ?</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/js/fancybox/jquery.fancybox.min.css"><!--[if lt IE 9]><script>(function(a,b){a="abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video".split(" ");for(b=a.length-1;b>=0;b--)document.createElement(a[b])})()</script><![endif]--><script src="/js/jquery-3.1.1.min.js"></script><script src="/js/fancybox/jquery.fancybox.min.js"></script></head><body style="opacity:0"><header class="head"><h1 class="head-title u-fl"><a href="/">fe ? not exsit ?</a></h1><nav class="head-nav u-fr"><ul class="head-nav__list"><li class="head-nav__item"><a class="head-nav__link" href="/archives">カタログ/（目录）</a></li></ul></nav></header><main class="main"><article class="post"><header class="post__head"> <time class="post__time" datetime="2018-05-29T11:47:44.925Z">May 29, 2018</time><h1 class="post__title"><a href="/2018/05/29/operate/">关于一些运算符的了解</a></h1><div class="post__main echo"><p>虽然博客面向的人可能也就1-2个哈哈，纯属记录学习抒情，不喜欢就喷呀。鲁迅说过：菜不在乎之。刚到新东家的时候在代码中经常遇到～、&gt;&gt;符号，经常以猜测逃避的态度去对待，是时候突击一学习一波了。</p>
+<h2 id="What’s-this-guy-called？"><a href="#What’s-this-guy-called？" class="headerlink" title="What’s this guy called？"></a>What’s this guy called？</h2><p>首先要明确知道上述的这些东西叫做ECMAScript运算符，你一定想起了算术运算符逻辑运算符。是的先来楼列一下运算符的种类</p>
+<ul>
+<li>一元运算符  ( delete、void、前增减量/后增减量运算符、一元加减法)</li>
+<li>位运算符    ( ～、 &amp; 、| 、^ 、&lt;&lt; 、&gt;&gt; 、&gt;&gt;&gt;)</li>
+<li>逻辑运算符  ( &amp;&amp; || !)</li>
+<li>乘性运算符 （ * / ）</li>
+<li>加性运算符 （ + - ）</li>
+<li>关系运算符 （ &gt; &lt; )</li>
+<li>等性运算符  ( == != === !==)</li>
+<li>条件运算符  ( 三目 )</li>
+<li>赋值运算符  ( = )</li>
+<li>逗号运算符  ( , )</li>
+</ul>
+<h2 id="How-to-understand-it"><a href="#How-to-understand-it" class="headerlink" title="How to understand it"></a>How to understand it</h2><p>目前菜鸡状态就只给大家介绍前两种运算符，可能只是本人不太了解吧所以稍稍熟悉一下免得被人说没见识。😯😯😯</p>
+<blockquote>
+<p>一元运算符</p>
+</blockquote>
+<ol>
+<li>delete</li>
+</ol>
+<p>用于删除对象的属性及成员方法，成功返回true，否则返回false， 如果删除的不存在仍然会返回true</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var obj = &#123;</span><br><span class="line">    name: &apos;litchi&apos;</span><br><span class="line">&#125;</span><br><span class="line">delete obj.name;  // true</span><br><span class="line">delete obj.sex;  // true</span><br></pre></td></tr></table></figure>
+<p>不能删除不可配置属性(像Math, Array, Object内置对象的属性)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var obj = &#123;&#125;;</span><br><span class="line">Object.defineProperty(obj, &apos;name&apos;, &#123;configurable: false&#125;);</span><br><span class="line">delete obj.name; //false</span><br><span class="line">delete Math.PI  //false</span><br></pre></td></tr></table></figure>
+<p>只能删除固有属性,不能删除原型链</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function Person() &#123; this.name=&apos;litchi&apos;; &#125;</span><br><span class="line">Person.prototype.name = &apos;dad&apos;;</span><br><span class="line">var person = new Person();</span><br><span class="line">delete person.name;</span><br><span class="line">console.log(person.name)  //dad</span><br></pre></td></tr></table></figure>
+<p>可删除数组元素，删除元素值位undefined</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var a = [1,2,3];</span><br><span class="line">delete a[0];</span><br><span class="line">console.log(a); //[undefined,2,3]</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>void</li>
+</ol>
+<p>对于javascript uris 用户点击链接，会eval uri中的代码，除非返回undefined。而void运算符返回undefined，可以用来避免浏览器的默认行为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a href=&quot;javascript:void(window.open(&apos;about:blank&apos;))&quot;&gt;Click me&lt;/a&gt;</span><br></pre></td></tr></table></figure>
+<p>可以使v8引擎识别自执行函数为函数表达式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void function iife() &#123;&#125;();</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>前增后增略</li>
+<li>一元加减法</li>
+</ol>
+<p>本质上对数字无影响，对于字符串，可以将一部分类似parseInt转化成数字。一元加法能将Ox开头的字符串转化成十进制。（剑法则不能)。另外+ new Date() 则是转化number格式，抵用date的valueof从而返回时间戳。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var a = &apos;200&apos;;</span><br><span class="line">console.log(+a)  // 200 number</span><br><span class="line">a = &apos;0xa&apos;;</span><br><span class="line">console.log(+a) // 10</span><br><span class="line">a = &apos;-20&apos;;</span><br><span class="line">console.log(+a) // -20</span><br><span class="line">a = new Date();</span><br><span class="line">console.log(a)  //1527599050292</span><br></pre></td></tr></table></figure></div></header></article><div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC8zNjg0OS8xMzM4NQ=="><script>(function(d, s) {var j, e = d.getElementsByTagName(s)[0];if (typeof LivereTower === 'function') { return; } j = d.createElement(s);j.src = 'https://cdn-city.livere.com/js/embed.dist.js';j.async = true;e.parentNode.insertBefore(j, e);})(document, 'script');</script></div></main><footer class="foot"><div class="foot-copy">&copy; 2016-2018 litchi</div></footer><script src="/js/scroller.js"></script><script src="/js/main.js"></script></body></html>
