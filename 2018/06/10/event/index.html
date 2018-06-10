@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="litchi"><link rel="alternative" href="/atom.xml" title="fe ? not exsit ?" type="application/atom+xml"><link rel="icon" href="/favicon.png"><title>事件、事件模型、事件处理机制 - fe ? not exsit ?</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/js/fancybox/jquery.fancybox.min.css"><!--[if lt IE 9]><script>(function(a,b){a="abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video".split(" ");for(b=a.length-1;b>=0;b--)document.createElement(a[b])})()</script><![endif]--><script src="/js/jquery-3.1.1.min.js"></script><script src="/js/fancybox/jquery.fancybox.min.js"></script></head><body style="opacity:0"><header class="head"><h1 class="head-title u-fl"><a href="/">fe ? not exsit ?</a></h1><nav class="head-nav u-fr"><ul class="head-nav__list"><li class="head-nav__item"><a class="head-nav__link" href="/archives">カタログ/（目录）</a></li></ul></nav></header><main class="main"><article class="post"><header class="post__head"> <time class="post__time" datetime="2018-06-10T12:57:32.946Z">June 10, 2018</time><h1 class="post__title"><a href="/2018/06/10/event/">事件、事件模型、事件处理机制</a></h1><div class="post__main echo"><h2 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h2><p>博客面向对象3个人啦。哈哈哈。你知道addEventListern接受的第三个参数吗？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">target.addEventListener(type, listener ,&#123;capture: Boolean, passive: Boolean, once: Boolean&#125;);</span><br><span class="line"></span><br><span class="line">target.addEventListener(type, listener, useCapture);</span><br></pre></td></tr></table></figure>
+<p>摘录mdn， 第三个参数可为obj或者boolean。仅为扩充理论知识。也来效仿一下无问东西，指明中心跟着图这个中心思想走。</p>
+<p><img src="http://oixr9tno0.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-06-10%20%E4%B8%8B%E5%8D%889.15.12.png" alt="模型"></p>
+<h2 id="Dom标准级别（摘抄）"><a href="#Dom标准级别（摘抄）" class="headerlink" title="Dom标准级别（摘抄）"></a>Dom标准级别（摘抄）</h2><p>首先要明确一下这个概念，DOM有4次版本更新，与DOM版本变更，产生了3种不同的DOM事件定义 DOM0级、DOM2级、DOM3级。由于DOM1级中没有事件的相关内容，所以没有DOM1级事件。</p>
+<ol>
+<li>Dom 0级模型。在html中直接绑定事件或者声明onclick</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;div onclick=&quot;&quot;&gt;&lt;/div&gt;</span><br><span class="line">let els = document.querySelector(&apos;div&apos;);</span><br><span class="line">els.onclick = () =&gt; &#123;&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>Dom 2级模型。即addEventListener</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">addEventListener(eventType, handler, useCapture)</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li><p>DOM浏览器中可能发生的事件有很多种，不同事件类型具有不同的信息，DOM3级事件规定了一下几种事件：</p>
+<ul>
+<li><p>UI事件，当用户与页面上的元素交互时触发；</p>
+</li>
+<li><p>焦点事件，当元素获得或者失去焦点时触发；</p>
+</li>
+<li><p>鼠标事件，当用户通过鼠标在页面上执行操作时触发；</p>
+</li>
+<li><p>滚轮事件，当使用鼠标滚轮（或类似设备）时触发；</p>
+</li>
+<li><p>文本事件，当在文档中，输入文本时触发；</p>
+</li>
+<li><p>键盘事件，当用户通过键盘在页面上执行操作时触发；</p>
+</li>
+<li><p>合成事件，当为IME（Input Method Editor，输入法编辑器）输入字符时触发；</p>
+</li>
+<li><p>变动事件，当底层Dom结构发生变化时触发；</p>
+</li>
+<li><p>DOM3级事件模块在DOM2级事件的基础上重新定义了这些事件，也添加了一些新事件。包括IE9在内的主流浏览器都支持DOM2级事件，IE9也支持DOM3级事件。</p>
+</li>
+<li><p>DOM3级还定义了自定义事件CustomEvent。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h2><p>JS的事件模型可以说是一种观察者模式的被观察者。刚打开mdn，晕了。event千千万，我看到他们认识就ok了。最近做一个clibboard的功能封装对ClipboardEvent很感兴趣。</p>
+<p>Event接口表示在DOM中发生的任何事件。事件处理函数可以附加在各种对象，event被创建传递给监听器。（可以看到该eventTarget会有evnet listeners哟）知识点总结来了。</p>
+<ol>
+<li>在mdn上千万的event基本上都是Event的子类。（ClipboardEvent， keyboardEvent…)</li>
+<li><p>本身的实例属性和成员方法有对冒泡传播阶段等的一些介绍。</p>
+<ul>
+<li><p>target 和 currentTarget的区别？ 一直弄混呀！target是调用事件的dom元素。currentTarget是其事件监听器当前正在被处理的元素节点。当事件捕获和冒泡发生时，这个值就会改变。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 第一个输出的是inner dom</span><br><span class="line"> * 第二个输出的事outer dom</span><br><span class="line"> */</span><br><span class="line">// html</span><br><span class="line">&lt;div class=&quot;outer&quot;&gt; &lt;div class=&quot;inner&quot;&gt;&lt;/div&gt; &lt;div&gt;</span><br><span class="line">//js</span><br><span class="line">let el = document.querySelector(&apos;.outer&apos;);</span><br><span class="line">el.addEventListener(&apos;click&apos;, (e) =&gt; &#123;</span><br><span class="line">    console.log(e.target); </span><br><span class="line">    console.log(e.currentTarget);</span><br><span class="line">&#125;, false)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>关于常见的Event.preventDefault()、Event.stopImmediatePropagation()<br>、Event.stopPropagation()的理解。后两者跟续在事件模型。</p>
+<ul>
+<li>Event.preventDefault  取消浏览器对当前事件的默认行为。例如阻止checkbox的选择、a连接的跳转等。</li>
+<li>Event.stopPropagation  阻止冒泡。</li>
+<li><p>Event.stopImmediatePropagation  阻止同一个事件被其他函数监听调用（暴力解决一切）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// stop checkbox 即不能处罚默认选中的行为</span><br><span class="line">    // html  </span><br><span class="line">    &lt;input type=&quot;checkbox&quot; id=&quot;check&quot;&gt;</span><br><span class="line">    // js</span><br><span class="line">    let el = document.querySelector(&apos;#check&apos;);</span><br><span class="line">    el.addEventListener(&apos;click&apos;, (el) =&gt; &#123;</span><br><span class="line">        el.preventDefault();</span><br><span class="line">    &#125;, false);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>创建一个自定义事件</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var build = new Event(&apos;test&apos;);</span><br><span class="line">el.addEventListener(&apos;test&apos;, () =&gt; &#123;&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="事件模型"><a href="#事件模型" class="headerlink" title="事件模型"></a>事件模型</h2><p>如大家周知捕获和冒泡。对于事件流则是捕获到目标元素再到冒泡。对于传播方向是到哪个节点需要看一下w3c规范的传播图即可得知。</p>
+<p><img src="https://images2015.cnblogs.com/blog/389048/201601/389048-20160106172829528-1930066526.jpg" alt="copy"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// flag置为true或false 看捕获和冒泡的输出。</span><br><span class="line">&lt;div&gt;</span><br><span class="line">    &lt;p&gt;</span><br><span class="line">        &lt;a&gt;hello&lt;/a&gt;</span><br><span class="line">    &lt;/p&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    let flag = true;</span><br><span class="line">    [&apos;html&apos;,&apos;body&apos;,&apos;div&apos;,&apos;p&apos;,&apos;a&apos;].forEach( item =&gt; &#123;</span><br><span class="line">        let el = document.querySelector(item);</span><br><span class="line">        el.addEventListener(&apos;click&apos;, () =&gt; &#123;</span><br><span class="line">            console.log(&apos;i am&apos;, item);</span><br><span class="line">        &#125;, flag);</span><br><span class="line">    &#125;)</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">// flag = true   html、body、div、p、a</span><br><span class="line">// flag = false  a , p , div, body, html</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 看捕获和冒泡同时的输出。</span><br><span class="line">[&apos;html&apos;,&apos;body&apos;,&apos;div&apos;,&apos;p&apos;,&apos;a&apos;].forEach( item =&gt; &#123;</span><br><span class="line">    let el = document.querySelector(item);</span><br><span class="line">    el.addEventListener(&apos;click&apos;, () =&gt; &#123;</span><br><span class="line">        console.log(&apos;i am&apos;, item);</span><br><span class="line">    &#125;);</span><br><span class="line">    el.addEventListener(&apos;click&apos;, () =&gt; &#123;</span><br><span class="line">        console.log(&apos;i am&apos;, item);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;)</span><br><span class="line">//  html, body , div ,p, a, a , p , div, body, html,</span><br></pre></td></tr></table></figure>
+<p>接着要看一下Event stopPropagation、stopImmediatePropagation的功效了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[&apos;html&apos;, &apos;body&apos;, &apos;p&apos;, &apos;a&apos;].forEach(targetName =&gt; &#123;</span><br><span class="line">  let $element = document.getElementsByTagName(targetName)[0];</span><br><span class="line">  $element.addEventListener(&apos;click&apos;, function(e) &#123;</span><br><span class="line">      e.stopPropagation();</span><br><span class="line">      console.log(targetName, &apos;click&apos;, true);</span><br><span class="line">  &#125;, true);</span><br><span class="line">&#125;);</span><br><span class="line">//html click true</span><br></pre></td></tr></table></figure>
+<p>可以看出stopPropagation不仅可以阻止冒泡还可以阻止捕获，其实也可以阻止处于目标阶段。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[&apos;html&apos;,&apos;body&apos;,&apos;div&apos;,&apos;p&apos;,&apos;a&apos;].forEach( item =&gt; &#123;</span><br><span class="line">    let el = document.querySelector(item);</span><br><span class="line">    el.addEventListener(&apos;click&apos;, (e) =&gt; &#123;</span><br><span class="line">        console.log(&apos;i am&apos;, item);</span><br><span class="line">    &#125;,true);</span><br><span class="line">    el.addEventListener(&apos;click&apos;, (e) =&gt; &#123;</span><br><span class="line">        e.stopImmediatePropagation();</span><br><span class="line">        // e.stopPropagation();</span><br><span class="line">        console.log(&apos;i am&apos;, item);</span><br><span class="line">    &#125;,false);</span><br><span class="line">    el.addEventListener(&apos;click&apos;, (e) =&gt; &#123;</span><br><span class="line">        console.log(&apos;i am2&apos;, item);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>stopImmediatePropagation只要执行到绑定在当前事件源的事件的该语句，就不再执行其他监听函数。</p>
+<h2 id="事件委托"><a href="#事件委托" class="headerlink" title="事件委托"></a>事件委托</h2><p>事件委托就是把一个或一组事件委托到它的外层元素。绑定事件即在最外层元素，通过事件流的冒泡机制触发每个子元素的事件。生活中的例子就是四个朋友排队买票，这四个朋友可以委托年龄最大的人买票。</p>
+<ul>
+<li>优点<ol>
+<li>减少内存消耗</li>
+<li>便于动态加载事件</li>
+<li>一次委托，终身受用</li>
+</ol>
+</li>
+<li>缺点<ol>
+<li>有些事件例如blur没有冒泡的行为</li>
+<li>还有些高频率事件mouseover等耗性能</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p> 这里面的stopImmediatePropagation和自定义事件都是dom3标准级别添加的。</p>
+</blockquote>
+</div></header></article><div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC8zNjg0OS8xMzM4NQ=="><script>(function(d, s) {var j, e = d.getElementsByTagName(s)[0];if (typeof LivereTower === 'function') { return; } j = d.createElement(s);j.src = 'https://cdn-city.livere.com/js/embed.dist.js';j.async = true;e.parentNode.insertBefore(j, e);})(document, 'script');</script></div></main><footer class="foot"><div class="foot-copy">&copy; 2016-2018 litchi</div></footer><script src="/js/scroller.js"></script><script src="/js/main.js"></script></body></html>
