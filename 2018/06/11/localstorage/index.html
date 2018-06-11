@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="litchi"><link rel="alternative" href="/atom.xml" title="fe ? not exsit ?" type="application/atom+xml"><link rel="icon" href="/favicon.png"><title>localStorage知识点记录 - fe ? not exsit ?</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/js/fancybox/jquery.fancybox.min.css"><!--[if lt IE 9]><script>(function(a,b){a="abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video".split(" ");for(b=a.length-1;b>=0;b--)document.createElement(a[b])})()</script><![endif]--><script src="/js/jquery-3.1.1.min.js"></script><script src="/js/fancybox/jquery.fancybox.min.js"></script></head><body style="opacity:0"><header class="head"><h1 class="head-title u-fl"><a href="/">fe ? not exsit ?</a></h1><nav class="head-nav u-fr"><ul class="head-nav__list"><li class="head-nav__item"><a class="head-nav__link" href="/archives">カタログ/（目录）</a></li></ul></nav></header><main class="main"><article class="post"><header class="post__head"> <time class="post__time" datetime="2018-06-11T11:48:29.525Z">June 11, 2018</time><h1 class="post__title"><a href="/2018/06/11/localstorage/">localStorage知识点记录</a></h1><div class="post__main echo"><h2 id="用处"><a href="#用处" class="headerlink" title="用处"></a>用处</h2><ol>
+<li><p>优化首屏</p>
+<ul>
+<li>可以缓存第一次请求接口数据进行渲染，之后真是请求接口在进行数据替换。 即appshell架构思想。</li>
+</ul>
+</li>
+<li><p>提高用户体验的数据</p>
+<ul>
+<li>缓存表单，刷新后仍可保存之前填写数据</li>
+<li>缓存js、css</li>
+</ul>
+</li>
+<li><p>跨页面之间通信</p>
+<ul>
+<li>网上有些封装的通信的例子。</li>
+</ul>
+</li>
+</ol>
+<h2 id="兼容"><a href="#兼容" class="headerlink" title="兼容"></a>兼容</h2><p>无需担心</p>
+<p><img src="http://oixr9tno0.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-06-11%20%E4%B8%8B%E5%8D%886.49.02.png" alt="use"></p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li><p>本地存储空间有限。</p>
+<ul>
+<li><p>撑爆内存会如何？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">let i = 0</span><br><span class="line">   while (true) &#123;</span><br><span class="line">       try &#123;</span><br><span class="line">           localStorage[`data-$&#123;i++&#125;`] = JSON.stringify(&#123; date: (new Date).toString() &#125;)</span><br><span class="line">       &#125; catch(e) &#123;</span><br><span class="line">           // exceeded the quot</span><br><span class="line">           console.log(e)</span><br><span class="line">           break;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>结果会是一个期望值内存溢出。</p>
+</li>
+</ul>
+</li>
+<li><p>依赖JSON.stringify 造成性能问题</p>
+</li>
+<li><p>频繁使用get、set取值设置</p>
+</li>
+<li><p>在某些iPhone/iPad上有时调用setItem()时会出现诡异的QUOTA_EXCEEDED_ERR错误。解决方法是在setItem之前先removeItem()。所以从这个兼容问题来看，貌似使用对象添加/删除键值对更方便一些，兼容也更强一些。</p>
+</li>
+<li><p>如若ui事件线程在其后，会阻塞ui thread。</p>
+</li>
+</ol>
+<h2 id="建议使用"><a href="#建议使用" class="headerlink" title="建议使用"></a>建议使用</h2><ol>
+<li>检测和异常捕捉</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">try &#123;</span><br><span class="line">    localStorage &amp;&amp; localStorage[&apos;xxx&apos;] = xxx;</span><br><span class="line">&#125; catch (e) &#123;</span><br><span class="line">    if (e.name === &apos;QUOTA_EXCEEDED_ERR&apos; || e.name === &apos;NS_ERROR_DOM_QUOTA_REACHED&apos;) &#123;</span><br><span class="line">        // todo</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        // todo</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li><p>尽量使用string，避免键值被JSON.stringify双重字符串化。即使使用原值会比string执行快那么一点点。</p>
+<p> <a href="https://jsperf.com/passing-strings-vs-primitive-in-localstorage" target="_blank" rel="noopener">click test</a></p>
+</li>
+<li><p>存储大小弥足珍贵， 谨慎设置key的数量。</p>
+</li>
+</ol>
+</div></header></article><div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC8zNjg0OS8xMzM4NQ=="><script>(function(d, s) {var j, e = d.getElementsByTagName(s)[0];if (typeof LivereTower === 'function') { return; } j = d.createElement(s);j.src = 'https://cdn-city.livere.com/js/embed.dist.js';j.async = true;e.parentNode.insertBefore(j, e);})(document, 'script');</script></div></main><footer class="foot"><div class="foot-copy">&copy; 2016-2018 litchi</div></footer><script src="/js/scroller.js"></script><script src="/js/main.js"></script></body></html>
