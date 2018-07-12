@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="author" content="litchi"><link rel="alternative" href="/atom.xml" title="fe ? not exsit ?" type="application/atom+xml"><link rel="icon" href="/favicon.png"><title>sourcemap - fe ? not exsit ?</title><link rel="stylesheet" href="/css/main.css"><link rel="stylesheet" href="/js/fancybox/jquery.fancybox.min.css"><!--[if lt IE 9]><script>(function(a,b){a="abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video".split(" ");for(b=a.length-1;b>=0;b--)document.createElement(a[b])})()</script><![endif]--><script src="/js/jquery-3.1.1.min.js"></script><script src="/js/fancybox/jquery.fancybox.min.js"></script></head><body style="opacity:0"><header class="head"><h1 class="head-title u-fl"><a href="/">fe ? not exsit ?</a></h1><nav class="head-nav u-fr"><ul class="head-nav__list"><li class="head-nav__item"><a class="head-nav__link" href="/archives">カタログ/（目录）</a></li></ul></nav></header><main class="main"><article class="post"><header class="post__head"> <time class="post__time" datetime="2018-07-12T10:02:57.399Z">July 12, 2018</time><h1 class="post__title"><a href="/2018/07/12/sourcemap/">sourcemap</a></h1><div class="post__main echo"><blockquote>
+<p>target </p>
+</blockquote>
+<p>解决通常用于性能优化将代码压缩后定位问题困难，在客户端代码不影响性能的前提下使源代码更加的具有可读性和更易调试，为此应运而生。</p>
+<blockquote>
+<p>what </p>
+</blockquote>
+<p>储存位置信息的json文件。就是这么简单，删繁就简三秋树。</p>
+<p><img src="http://oixr9tno0.bkt.clouddn.com/download.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;version&quot;:3,   // soucemap 版本</span><br><span class="line">    &quot;file&quot;:&quot;vue.js&quot;, // 转换后的文件名</span><br><span class="line">    &quot;sourceRoot&quot; : &quot;&quot;, //转换前的文件所在的目录。如果与转换前的文件在同一目录，该项为空。</span><br><span class="line">    &quot;sources&quot;:[&quot;../src/shared/util.js&quot;, ... ], // 转换前的文件。</span><br><span class="line">    &quot;sourcesContent&quot;: ...//记录位置信息的字符串</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>support</p>
+</blockquote>
+<p>主流浏览器都默认支持。例如chrome中的devtools可对于sourcemap进行设置。</p>
+<blockquote>
+<p>how to work</p>
+</blockquote>
+<p>只要解析引擎支持，Closure compiler将生成sourcemap， 合并和压缩都会生成的sourcemap文件。除非你关闭了你浏览器的devtools中的enable sourcemap。你的工作就是在处理后的代码加一行代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//# sourceMappingURL=vue.js.map</span><br></pre></td></tr></table></figure>
+<p><img src="http://oixr9tno0.bkt.clouddn.com/download-1.png" alt=""></p>
+<p>读取到对应位置的sourcemap文件，然后解析储存位置信息的该文件。读取到转换后的代码的每一个位置，所对应的转换前的位置。解析原理可看<a href="https://www.html5rocks.com/en/tutorials/developertools/sourcemaps/" target="_blank" rel="noopener">链接</a>。</p>
+<blockquote>
+<p>how to use</p>
+</blockquote>
+<ul>
+<li>webpack</li>
+<li>rollup</li>
+<li>uglyfyjs</li>
+<li>Closure编译器</li>
+<li>…</li>
+</ul>
+<p>生成sourcemap后，打开浏览器就可以欢快的调试源码了。</p>
+<p><img src="http://oixr9tno0.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-07-12%20%E4%B8%8B%E5%8D%883.12.20.png" alt=""></p>
+</div></header></article><div class="comments" id="lv-container" data-id="city" data-uid="MTAyMC8zNjg0OS8xMzM4NQ=="><script>(function(d, s) {var j, e = d.getElementsByTagName(s)[0];if (typeof LivereTower === 'function') { return; } j = d.createElement(s);j.src = 'https://cdn-city.livere.com/js/embed.dist.js';j.async = true;e.parentNode.insertBefore(j, e);})(document, 'script');</script></div></main><footer class="foot"><div class="foot-copy">&copy; 2016-2018 litchi</div></footer><script src="/js/scroller.js"></script><script src="/js/main.js"></script></body></html>
